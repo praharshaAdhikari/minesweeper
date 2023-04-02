@@ -1,7 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb } from '@fortawesome/free-solid-svg-icons'; 
-import { faFlag } from '@fortawesome/free-solid-svg-icons'; 
+import { faBomb, faFlag } from '@fortawesome/free-solid-svg-icons';
 
 function Square(props: {bomb: boolean, status: number, touch: number, clickedLeft: Function, clickedRight: Function}) {
   const squareEl = 
@@ -20,7 +19,7 @@ function Square(props: {bomb: boolean, status: number, touch: number, clickedLef
         event.preventDefault();
         props.clickedRight();
       }}
-      >
+    >
       {squareEl}
     </span>
   )
