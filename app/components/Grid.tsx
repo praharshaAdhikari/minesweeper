@@ -25,7 +25,6 @@ function Grid(props: { totalSquares: number }) {
   useEffect(() => {
     setStatus(Array.from({ length: props.totalSquares }, () => 0));
     setBombs(Array.from({ length: props.totalSquares }, () => false));
-    setTouchingBombs(Array.from({ length: props.totalSquares }, () => 0));    
     setSquareZero(-1);
     setGameOver(0);
     setToggle(prevState => !prevState);
@@ -129,14 +128,24 @@ function Grid(props: { totalSquares: number }) {
     };
   };
 
+  const handleRetry = () => {
+    setStatus(Array.from({ length: props.totalSquares }, () => 0));
+    setBombs(Array.from({ length: props.totalSquares }, () => false));
+    setSquareZero(-1);
+    setGameOver(0);
+    setToggle(prevState => !prevState);
+  };
+
   const gridEl = bombs.map((bomb, index) => <Square key = {index} bomb ={bomb} status={status[index]} touch = {touchingBombs[index]} clickedLeft = {()=> handleLeftClick(index)} clickedRight = {()=> handleRightClick(index)} gameOver = {gameOver}/>);
   const gridCols = "grid-cols-" + `${Math.sqrt(props.totalSquares)}`;
   
   return (
       <div className = "flex flex-col items-center">
         <div className = {`grid ${gridCols} gap-1`}> {gridEl} </div>
-        {(gameOver === 1) && <div className="mt-5 text-white"> GAME OVER! Reload to play again.</div>}
-        {(gameOver === -1) && <div className="mt-5 text-white"> YOU WON! Reload to play again.</div>}
+        {/* {(gameOver === 1) && <div className="m-5 text-white"> GAME OVER! Reload to play again.</div>} */}
+        {/* {(gameOver === -1) && <div className="m-5 text-white"> YOU WON! Reload to play again.</div>} */}
+        {(gameOver === 1) && <div className="bg-red-500 rounded-md text-sm uppercase w-32 h-10 flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none mt-5" onClick={handleRetry}> Play Again </div>}
+        {(gameOver === -1) && <div className="bg-blue-500 rounded-md text-sm uppercase w-32 h-10 flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none mt-5" onClick={handleRetry}> Play Again </div>}
       </div>
   );
 };
