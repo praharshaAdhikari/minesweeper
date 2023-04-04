@@ -134,7 +134,7 @@ function Grid(props: { totalSquares: number }) {
   
   return (
       <div className = "flex flex-col items-center">
-        <div className = {`grid ${gridCols} gap-2`}> {gridEl} </div>
+        <div className = {`grid ${gridCols} gap-1`}> {gridEl} </div>
         {(gameOver === 1) && <div className="mt-5 text-white"> GAME OVER! Reload to play again.</div>}
         {(gameOver === -1) && <div className="mt-5 text-white"> YOU WON! Reload to play again.</div>}
       </div>

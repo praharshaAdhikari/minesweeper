@@ -8,7 +8,7 @@ import Grid from './components/Grid'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const [squares, setSquares] = useState(25);
+  const [squares, setSquares] = useState(49);
 
   return (
     <div>
