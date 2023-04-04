@@ -13,7 +13,11 @@ function Grid(props: { totalSquares: number }) {
 
   const initializeGrid = () => {
     if (squareZero !== -1) {
-      const random = status.map(() => Math.floor(Math.random() * 6) > 3);
+      const random = status.map(() => 
+        props.totalSquares === 49 ? Math.floor(Math.random() * 6) > 4 :
+          props.totalSquares === 81 ? Math.floor(Math.random() * 7) > 4 :
+            props.totalSquares === 121 ? Math.floor(Math.random() * 8) > 4 : false
+      );
       random[squareZero] = false;
       neighbours(squareZero).forEach(item => {
         random[item] = false;
