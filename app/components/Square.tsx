@@ -11,13 +11,14 @@ function Square(props: {bomb: boolean, status: number, touch: number, clickedLef
             : props.touch.toString();
 
   const background = 
-    props.gameOver !== 0 ? `bg-red-600` : 
-      props.status === 0 ? `bg-green-500 hover:bg-green-200 hover:scale-110` 
-        : props.status === 2 ? `bg-blue-500 hover:scale-110`
-          : `bg-white`;
+    props.gameOver === 1 ? `bg-red-600 text-red-300`
+      : props.gameOver === -1 ? `bg-blue-500 text-blue-200`
+        : props.status === 0 ? `bg-green-500 hover:bg-green-200 hover:scale-110` 
+          : props.status === 2 ? `bg-blue-500 hover:scale-110`
+            : `bg-white`;
   return (
     <span 
-      className = {`${background} w-12 h-12 flex justify-center items-center cursor-pointer rounded-md duration-500`}
+      className = {`${background} w-12 h-12 flex justify-center items-center cursor-pointer rounded-md duration-100`}
       onClick = {()=> props.clickedLeft()} 
       onContextMenu = {(event)=> {
         event.preventDefault();

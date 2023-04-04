@@ -4,15 +4,16 @@ import React, { useState, useEffect } from 'react';
 
 function Grid(props: { totalSquares: number }) {
   const [status, setStatus] = useState(Array.from({ length: props.totalSquares }, () => 0));
-  const [bombs, setBombs] = useState(status.map(() => false));
-  const [touchingBombs, setTouchingBombs] = useState(status.map(() => 0));
+  const [bombs, setBombs] = useState(Array.from({ length: props.totalSquares }, () => false));
+  const [touchingBombs, setTouchingBombs] = useState(Array.from({ length: props.totalSquares }, () => 0));
   const [squareZero, setSquareZero] = useState(-1);
   const [gameOver, setGameOver] = useState(0);
+  const [toggle, setToggle] = useState(false);
   let tempState : number[]; 
 
   const initializeGrid = () => {
     if (squareZero !== -1) {
-      const random = Array.from({ length: props.totalSquares }, () => Math.floor(Math.random() * 6) > 3);
+      const random = status.map(() => Math.floor(Math.random() * 6) > 3);
       random[squareZero] = false;
       neighbours(squareZero).forEach(item => {
         random[item] = false;
@@ -20,10 +21,19 @@ function Grid(props: { totalSquares: number }) {
       setBombs(random);
     }
   }
-  
+
+  useEffect(() => {
+    setStatus(Array.from({ length: props.totalSquares }, () => 0));
+    setBombs(Array.from({ length: props.totalSquares }, () => false));
+    setTouchingBombs(Array.from({ length: props.totalSquares }, () => 0));    
+    setSquareZero(-1);
+    setGameOver(0);
+    setToggle(prevState => !prevState);
+  }, [props.totalSquares]);
+
   useEffect(() => {
     initializeGrid();
-  }, [squareZero]);
+  }, [squareZero, toggle]);
 
   useEffect(()=> {
     setTouchingBombs(bombs.map((bomb, index) => {
@@ -58,7 +68,7 @@ function Grid(props: { totalSquares: number }) {
       if (showCount === status.length - totalBombs) return -1;
       else return 0;
     };
-    setGameOver(checkGameOver());
+    if (gameOver === 0) setGameOver(checkGameOver());
   }, [status]);
 
   useEffect(() => {
@@ -126,7 +136,7 @@ function Grid(props: { totalSquares: number }) {
       <div className = "flex flex-col items-center">
         <div className = {`grid ${gridCols} gap-2`}> {gridEl} </div>
         {(gameOver === 1) && <div className="mt-5 text-white"> GAME OVER! Reload to play again.</div>}
-        {(gameOver === -1) && <div className="mt-5"> YOU WON! Reload to play again.</div>}
+        {(gameOver === -1) && <div className="mt-5 text-white"> YOU WON! Reload to play again.</div>}
       </div>
   );
 };
