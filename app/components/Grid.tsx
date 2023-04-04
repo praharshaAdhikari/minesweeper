@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 
 function Grid(props: { totalSquares: number }) {
   const [status, setStatus] = useState(Array.from({ length: props.totalSquares }, () => 0));
-  const [bombs, setBombs] = useState(status.map(status => false));
-  const [touchingBombs, setTouchingBombs] = useState(status.map(status => 0));
+  const [bombs, setBombs] = useState(status.map(() => false));
+  const [touchingBombs, setTouchingBombs] = useState(status.map(() => 0));
   const [squareZero, setSquareZero] = useState(-1);
   const [gameOver, setGameOver] = useState(0);
   let tempState : number[]; 
@@ -20,7 +20,7 @@ function Grid(props: { totalSquares: number }) {
       setBombs(random);
     }
   }
-
+  
   useEffect(() => {
     initializeGrid();
   }, [squareZero]);
@@ -59,8 +59,11 @@ function Grid(props: { totalSquares: number }) {
       else return 0;
     };
     setGameOver(checkGameOver());
-  }, [status])
-  
+  }, [status]);
+
+  useEffect(() => {
+    if (gameOver) setStatus(status.map(() => 1));
+  }, [gameOver]);  
   
   const neighbours = (index: number) => {
     let line = Math.sqrt(props.totalSquares);
@@ -116,13 +119,13 @@ function Grid(props: { totalSquares: number }) {
     };
   };
 
-  const gridEl = bombs.map((bomb, index) => <Square key = {index} bomb ={bomb} status={status[index]} touch = {touchingBombs[index]} clickedLeft = {()=> handleLeftClick(index)} clickedRight = {()=> handleRightClick(index)}/>);
+  const gridEl = bombs.map((bomb, index) => <Square key = {index} bomb ={bomb} status={status[index]} touch = {touchingBombs[index]} clickedLeft = {()=> handleLeftClick(index)} clickedRight = {()=> handleRightClick(index)} gameOver = {gameOver}/>);
   const gridCols = "grid-cols-" + `${Math.sqrt(props.totalSquares)}`;
   
   return (
       <div className = "flex flex-col items-center">
-        <div className = {`grid ${gridCols} gap-1 mt-10`}> {gridEl} </div>
-        {(gameOver === 1) && <div className="mt-5"> GAME OVER! Reload to play again.</div>}
+        <div className = {`grid ${gridCols} gap-2`}> {gridEl} </div>
+        {(gameOver === 1) && <div className="mt-5 text-white"> GAME OVER! Reload to play again.</div>}
         {(gameOver === -1) && <div className="mt-5"> YOU WON! Reload to play again.</div>}
       </div>
   );
