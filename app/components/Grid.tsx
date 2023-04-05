@@ -1,6 +1,8 @@
 'use client';
 import Square from "./Square";
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 function Grid(props: { totalSquares: number }) {
   const [status, setStatus] = useState(Array.from({ length: props.totalSquares }, () => 0));
@@ -145,11 +147,16 @@ function Grid(props: { totalSquares: number }) {
   
   return (
       <div className = "flex flex-col items-center">
-        <div className = {`grid ${gridCols} gap-1`}> {gridEl} </div>
+        <div className = {`grid ${gridCols} gap-1 relative`}>
+          {gridEl}
+          {(gameOver !== 0) && <div className="backdrop-blur-xs absolute w-full h-full">
+            {(gameOver === 1) && <div className="bg-red-600 w-12 h-12 rounded-md flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 absolute text-white shadow-button" onClick={handleRetry}> <FontAwesomeIcon icon={faRotateLeft}/> </div>}
+            {(gameOver === -1) && <div className="bg-blue-500 w-12 h-12 rounded-md flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 absolute text-white shadow-button" onClick={handleRetry}> <FontAwesomeIcon icon={faRotateLeft}/> </div>}
+          </div>}
+        </div>
         {/* {(gameOver === 1) && <div className="m-5 text-white"> GAME OVER! Reload to play again.</div>} */}
         {/* {(gameOver === -1) && <div className="m-5 text-white"> YOU WON! Reload to play again.</div>} */}
-        {(gameOver === 1) && <div className="bg-red-500 rounded-md text-sm uppercase w-32 h-10 flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none mt-5" onClick={handleRetry}> Play Again </div>}
-        {(gameOver === -1) && <div className="bg-blue-500 rounded-md text-sm uppercase w-32 h-10 flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none mt-5" onClick={handleRetry}> Play Again </div>}
+
       </div>
   );
 };
