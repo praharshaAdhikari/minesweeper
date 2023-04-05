@@ -150,7 +150,7 @@ function Grid(props: { totalSquares: number }) {
         <div className = {`grid ${gridCols} gap-1 relative`}>
           {gridEl}
           {(gameOver !== 0) && <div className="backdrop-blur-xs absolute w-full h-full">
-            {(gameOver === 1) && <div className="bg-red-600 w-12 h-12 rounded-md flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 absolute text-white shadow-button" onClick={handleRetry}> <FontAwesomeIcon icon={faRotateLeft}/> </div>}
+            {(gameOver === 1) && <div className="bg-red-600 w-12 h-12 rounded-md flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 absolute text-white shadow-button border-2" onClick={handleRetry}> <FontAwesomeIcon icon={faRotateLeft}/> </div>}
             {(gameOver === -1) && <div className="bg-blue-500 w-12 h-12 rounded-md flex items-center justify-center active:scale-90 duration-200 cursor-pointer font-bold select-none bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 absolute text-white shadow-button" onClick={handleRetry}> <FontAwesomeIcon icon={faRotateLeft}/> </div>}
           </div>}
         </div>
