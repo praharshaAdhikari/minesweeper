@@ -215,7 +215,7 @@ function Grid(props: { totalSquares: number }) {
   
   return (
       <div className = "flex flex-col items-center">
-        <div className = {`grid ${gridCols} sm:gap-[6px] gap-1 relative`}>
+        <div className = {`grid ${gridCols} sm:gap-[6px] gap-[3px] relative`}>
           {gridEl}
           {(gameOver !== 0) && <div className="backdrop-blur-[0.8px] absolute w-full h-full flex items-center justify-center">
             <button className={`${gameOver === 1 ? `bg-red-600` : `bg-blue-500`} w-12 h-12 rounded-md flex items-center justify-center active:scale-90 hover:scale-110 duration-200 font-bold select-none  text-white shadow-[0px_0px_10px_4px_rgba(0,0,0,0.7)] border-2`} onClick={handleRetry}> 
