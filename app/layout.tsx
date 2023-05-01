@@ -1,4 +1,11 @@
 import './globals.css'
+import { Nunito } from 'next/font/google';
+
+const nunito = Nunito({
+  weight: "700",
+  subsets: ['latin'],
+  variable: '--font-nunito'
+});
 
 export const metadata = {
   title: 'Minesweeper',
@@ -12,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${nunito.variable} font-sans`}>
         {children}
       </body>
     </html>

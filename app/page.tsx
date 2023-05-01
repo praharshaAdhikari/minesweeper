@@ -1,11 +1,7 @@
 'use client';
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import { Inter } from 'next/font/google'
+import { useState } from 'react'
 import Header from './components/Header'
 import Grid from './components/Grid'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [squares, setSquares] = useState(49);

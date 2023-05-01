@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb, faFlag } from '@fortawesome/free-solid-svg-icons';
+import { faBomb, faFlag } from "@fortawesome/free-solid-svg-icons";
 
 function Square(props: {bomb: boolean, status: number, touch: number, clickedLeft: Function, clickedRight: Function, gameOver: number}) {
   const squareEl = 
     props.status === 0 ? null 
       : props.status === 2 ? <FontAwesomeIcon icon={faFlag} /> 
         : props.bomb ? <FontAwesomeIcon icon={faBomb} /> 
-          : props.touch === 0 ? "" 
+          : props.touch === 0 ? ""
             : props.touch.toString();
 
   const background = 
@@ -16,17 +16,18 @@ function Square(props: {bomb: boolean, status: number, touch: number, clickedLef
         : props.status === 0 ? `bg-green-500 hover:bg-green-200 hover:scale-110` 
           : props.status === 2 ? `bg-blue-500 hover:scale-110`
             : `bg-white`;
+            
   return (
-    <span 
-      className = {`${background} w-10 h-10 flex justify-center items-center cursor-pointer rounded-md duration-100 text-xs font-extrabold select-none`}
-      onClick = {()=> props.clickedLeft()} 
+    <button 
+      className = {`${background} w-10 h-10 flex justify-center items-center rounded-md duration-100 text-xs select-none`}
+      onClick = {()=> props.clickedLeft()}
       onContextMenu = {(event)=> {
         event.preventDefault();
         props.clickedRight();
       }}
     >
       {squareEl}
-    </span>
+    </button>
   )
 }
 

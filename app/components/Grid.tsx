@@ -1,6 +1,6 @@
 'use client';
 import Square from "./Square";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +10,15 @@ function Grid(props: { totalSquares: number }) {
   const [touchingBombs, setTouchingBombs] = useState(Array.from({ length: props.totalSquares }, () => 0));
   const [squareZero, setSquareZero] = useState(-1);
   const [gameOver, setGameOver] = useState(0);
+  const [gameStart, setGameStart] = useState(false);
+  const [timer, setTimer] = useState({
+    hr: 0,
+    min: 0,
+    sec: 0,
+    msec: 0
+  });
   const [toggle, setToggle] = useState(false);
+  const interval = useRef<any>();
   let tempState : number[]; 
 
   const initializeGrid = () => {
@@ -20,19 +28,55 @@ function Grid(props: { totalSquares: number }) {
           props.totalSquares === 81 ? Math.floor(Math.random() * 7) > 4 :
             props.totalSquares === 121 ? Math.floor(Math.random() * 8) > 4 : false
       );
-      random[squareZero] = false;
+      random[squareZero] = false; 
       neighbours(squareZero).forEach(item => {
         random[item] = false;
       });
       setBombs(random);
     }
   }
+  
+  useEffect(() => {
+    if(gameStart) {
+      interval.current = setInterval(() => {
+        setTimer(prevState => {
+          const newState = {...prevState};
+          newState.msec += 10;
+          if(newState.msec === 1000) {
+            newState.sec++;
+            newState.msec = 0;
+          };
+
+          if(newState.sec === 60) {
+            newState.min++;
+            newState.sec = 0;
+          };
+
+          if(newState.min === 60) {
+            newState.hr++;
+            newState.min = 0;
+          };
+          return newState;
+        });
+      }, 10);
+    }
+    else {
+      clearInterval(interval.current);
+    };
+  }, [gameStart]);
 
   useEffect(() => {
     setStatus(Array.from({ length: props.totalSquares }, () => 0));
     setBombs(Array.from({ length: props.totalSquares }, () => false));
     setSquareZero(-1);
     setGameOver(0);
+    setGameStart(false);
+    setTimer({
+      hr: 0,
+      min: 0,
+      sec: 0,
+      msec: 0
+    });
     setToggle(prevState => !prevState);
   }, [props.totalSquares]);
 
@@ -77,7 +121,10 @@ function Grid(props: { totalSquares: number }) {
   }, [status]);
 
   useEffect(() => {
-    if (gameOver) setStatus(status.map(() => 1));
+    if (gameOver !== 0) {
+      setStatus(status.map(() => 1));
+      setGameStart(false);
+    }
   }, [gameOver]);  
   
   const neighbours = (index: number) => {
@@ -107,6 +154,10 @@ function Grid(props: { totalSquares: number }) {
   const handleLeftClick = (index: number) => {
     if (gameOver !== 0) return;
 
+    if (!gameStart) {
+      setGameStart(true);
+    }
+
     if(squareZero === -1){
       setSquareZero(index);
       return;
@@ -121,6 +172,8 @@ function Grid(props: { totalSquares: number }) {
   const handleRightClick = (index: number) => {
     if (gameOver !== 0) return;
 
+    if (!gameStart) setGameStart(true);
+
     if ((status[index] === 1)) return;
     if ((status[index] === 0)){
       tempState = [...status];
@@ -134,27 +187,43 @@ function Grid(props: { totalSquares: number }) {
     };
   };
 
+  const displayTimer = () => {
+    return (
+      timer.hr.toString().padStart(2, '0') + " : " +
+        timer.min.toString().padStart(2, '0') + " : " +
+          timer.sec.toString().padStart(2, '0') + " : " +
+            (timer.msec / 10).toString().padStart(2, '0')
+    )
+  };
+
   const handleRetry = () => {
     setStatus(Array.from({ length: props.totalSquares }, () => 0));
     setBombs(Array.from({ length: props.totalSquares }, () => false));
     setSquareZero(-1);
     setGameOver(0);
     setToggle(prevState => !prevState);
+    setTimer({
+      hr: 0,
+      min: 0,
+      sec: 0,
+      msec: 0
+    });
   };
 
   const gridEl = bombs.map((bomb, index) => <Square key = {index} bomb ={bomb} status={status[index]} touch = {touchingBombs[index]} clickedLeft = {()=> handleLeftClick(index)} clickedRight = {()=> handleRightClick(index)} gameOver = {gameOver}/>);
-  const gridCols = "grid-cols-" + `${Math.sqrt(props.totalSquares)}`;
+  const gridCols = `grid-cols-${Math.sqrt(props.totalSquares)}`;
   
   return (
       <div className = "flex flex-col items-center">
         <div className = {`grid ${gridCols} gap-[6px] relative`}>
           {gridEl}
           {(gameOver !== 0) && <div className="backdrop-blur-[0.8px] absolute w-full h-full flex items-center justify-center">
-            <div className={`${gameOver === 1 ? `bg-red-600` : `bg-blue-500`} w-12 h-12 rounded-md flex items-center justify-center active:scale-90 hover:scale-110 duration-200 cursor-pointer font-bold select-none  text-white shadow-[0px_0px_10px_4px_rgba(0,0,0,0.7)] border-2`} onClick={handleRetry}> 
+            <button className={`${gameOver === 1 ? `bg-red-600` : `bg-blue-500`} w-12 h-12 rounded-md flex items-center justify-center active:scale-90 hover:scale-110 duration-200 font-bold select-none  text-white shadow-[0px_0px_10px_4px_rgba(0,0,0,0.7)] border-2`} onClick={handleRetry}> 
               <FontAwesomeIcon icon={faRotateLeft}/>
-            </div>
+            </button>
           </div>}
         </div> 
+        <div className="text-white mt-2 select-none">{displayTimer()}</div>
       </div>
   );
 };
