@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <Header clicked = {(setNumber: number) => setSquares(setNumber)}/>
-      <div className="bg-neutral-900 flex justify-center items-start pt-10 h-screen">
+      <div className="bg-neutral-900 flex justify-center items-start pt-10 h-[90vh]">
         <Grid totalSquares={squares}/>
       </div>
     </div>
