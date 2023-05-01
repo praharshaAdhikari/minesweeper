@@ -19,7 +19,7 @@ function Square(props: {bomb: boolean, status: number, touch: number, clickedLef
             
   return (
     <button 
-      className = {`${background} w-10 h-10 flex justify-center items-center rounded-md duration-100 text-xs select-none`}
+      className = {`${background} sm:w-10 sm:h-10 w-6 h-6 flex justify-center items-center rounded-md duration-100 text-xs select-none`}
       onClick = {()=> props.clickedLeft()}
       onContextMenu = {(event)=> {
         event.preventDefault();
