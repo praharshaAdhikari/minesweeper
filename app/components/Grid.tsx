@@ -17,6 +17,26 @@ function Grid(props: { totalSquares: number }) {
     sec: 0,
     msec: 0
   });
+  const [scores, setScores] = useState({
+    easy: {
+      hr: 0,
+      min: 0, 
+      sec: 0,
+      msec: 0
+    },
+    mid: {
+      hr: 0,
+      min: 0, 
+      sec: 0,
+      msec: 0
+    },
+    hard: {
+      hr: 0,
+      min: 0, 
+      sec: 0,
+      msec: 0
+    },
+  })
   const [toggle, setToggle] = useState(false);
   const interval = useRef<any>();
   let tempState : number[]; 
@@ -63,6 +83,9 @@ function Grid(props: { totalSquares: number }) {
     else {
       clearInterval(interval.current);
     };
+
+    if (gameOver === -1) {
+    }
   }, [gameStart]);
 
   useEffect(() => {
@@ -210,11 +233,23 @@ function Grid(props: { totalSquares: number }) {
     });
   };
 
+  const scoresSetter = ()=> {
+    if (props.totalSquares === 49) {
+      
+    }
+    else if (props.totalSquares === 81) {
+
+    }
+    else if (props.totalSquares === 121) {
+
+    }
+  }
+
   const gridEl = bombs.map((bomb, index) => <Square key = {index} bomb ={bomb} status={status[index]} touch = {touchingBombs[index]} clickedLeft = {()=> handleLeftClick(index)} clickedRight = {()=> handleRightClick(index)} gameOver = {gameOver}/>);
   const gridCols = `grid-cols-${Math.sqrt(props.totalSquares)}`;
   
   return (
-      <div className = "flex flex-col items-center">
+      <div className = "flex flex-col items-center justify-center sm:h-auto h-96">
         <div className = {`grid ${gridCols} sm:gap-[6px] gap-[3px] relative`}>
           {gridEl}
           {(gameOver !== 0) && <div className="backdrop-blur-[0.8px] absolute w-full h-full flex items-center justify-center">
@@ -223,7 +258,7 @@ function Grid(props: { totalSquares: number }) {
             </button>
           </div>}
         </div> 
-        <div className="text-white mt-2 select-none">{displayTimer()}</div>
+        <div className="text-white my-3 select-none">{displayTimer()}</div>
       </div>
   );
 };
